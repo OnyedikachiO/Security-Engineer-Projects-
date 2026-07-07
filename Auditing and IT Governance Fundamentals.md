@@ -6,7 +6,6 @@ This project demonstrates the practical application of information systems audit
 
 The project also highlights how structured auditing supports regulatory compliance, improves internal controls, identifies operational risks, and provides management with actionable recommendations for continuous improvement.
 
-> **Disclaimer:** All activities documented in this project were performed in authorized training environments for educational purposes only.
 
 ---
 
@@ -424,3 +423,5 @@ By completing this project, I gained practical experience in:
 - Supporting organizational compliance and continuous improvement
 
 ---
+
+> **Disclaimer:** All activities documented in this project were performed in authorized training environments for educational purposes only.
