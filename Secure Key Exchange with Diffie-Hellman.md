@@ -257,3 +257,234 @@ The output exposes:
 - Parameter Size
 
 This exercise demonstrates how production systems generate trusted Diffie-Hellman parameters for secure key exchange.
+
+---
+
+# Practical Implementation
+
+## Generating Diffie-Hellman Parameters
+
+To simulate a production-ready key exchange, I generated Diffie-Hellman parameters using OpenSSL.
+
+Generate a 2048-bit parameter file:
+
+```bash
+openssl dhparam -out dhparams.pem 2048
+```
+
+Inspect the generated parameters:
+
+```bash
+openssl dhparam -in dhparams.pem -text -noout
+```
+
+The generated parameter file contains:
+
+- Prime Number (P)
+- Generator (G)
+- Parameter Size
+
+Generating large prime numbers requires significant computational effort because OpenSSL searches for cryptographically secure prime values suitable for Diffie-Hellman key exchange.
+
+---
+
+# Inspecting Diffie-Hellman Parameters
+
+One of the practical tasks involved inspecting an existing Diffie-Hellman parameter file.
+
+```bash
+openssl dhparam -in dhparams.pem -text -noout
+```
+
+Example output:
+
+```text
+DH Parameters: (4096 bit)
+
+prime:
+00:c0:10:65:c6:ad...
+
+generator: 2 (0x2)
+```
+
+From the generated output I verified:
+
+- Parameter Size: **4096 bits**
+- Generator Value: **2**
+
+This confirmed that strong cryptographic parameters had been generated successfully.
+
+---
+
+# Parameter Validation
+
+As part of the laboratory exercise, I validated important characteristics of the generated Diffie-Hellman parameters.
+
+## Prime Size
+
+Verified that the generated prime was:
+
+```
+4096 bits
+```
+
+Using larger prime values significantly increases resistance against attacks targeting the Discrete Logarithm Problem.
+
+---
+
+## Least Significant Byte
+
+After inspecting the generated prime number, I identified its final byte.
+
+```
+4f
+```
+
+This exercise demonstrated how to inspect cryptographic parameter files using OpenSSL and verify generated values.
+
+---
+
+# Security Analysis
+
+The Diffie-Hellman protocol successfully enables two parties to establish a shared secret without transmitting that secret across the network.
+
+However, Diffie-Hellman alone provides:
+
+- Confidentiality
+- Secure key establishment
+
+It does **not** provide:
+
+- Authentication
+- Identity verification
+
+Without authentication, the protocol remains vulnerable to impersonation attacks.
+
+---
+
+# Man-in-the-Middle (MITM) Attack
+
+One of the most significant weaknesses of unauthenticated Diffie-Hellman is its susceptibility to a **Man-in-the-Middle (MITM)** attack.
+
+During this attack, an adversary intercepts the key exchange process and establishes independent shared secrets with both communicating parties.
+
+Instead of Alice and Bob communicating securely with one another, both unknowingly establish encrypted sessions with the attacker.
+
+The attacker can then:
+
+- Read messages
+- Modify messages
+- Forward altered messages
+- Impersonate both parties
+
+without either participant realizing the compromise.
+
+---
+
+# MITM Attack Workflow
+
+```mermaid
+flowchart LR
+
+Alice -->|Public Value| Mallory
+
+Mallory -->|Fake Public Value| Bob
+
+Bob -->|Public Value| Mallory
+
+Mallory -->|Fake Public Value| Alice
+
+Mallory --> SharedSecret1
+
+Mallory --> SharedSecret2
+```
+
+---
+
+# Engineering Implications
+
+This exercise demonstrates an important engineering principle:
+
+> **Encryption alone does not guarantee secure communication.**
+
+A secure communication protocol must provide:
+
+- Confidentiality
+- Authentication
+- Integrity
+
+Diffie-Hellman solves only one part of the problem:
+
+**Secure key establishment.**
+
+Authentication must be added separately.
+
+---
+
+# Modern Security Solutions
+
+Modern cryptographic protocols solve the authentication problem by combining Diffie-Hellman with digital certificates and public key infrastructure (PKI).
+
+Examples include:
+
+- TLS
+- HTTPS
+- SSH
+- VPN protocols
+
+These protocols authenticate communicating parties before completing the Diffie-Hellman key exchange, preventing MITM attacks.
+
+---
+
+# Validation & Practical Exercises
+
+During this project, I successfully completed the following practical exercises:
+
+- Generated Diffie-Hellman parameters using OpenSSL
+- Inspected generated parameter files
+- Verified cryptographic parameter sizes
+- Identified generator values
+- Validated prime lengths
+- Examined prime number structures
+- Identified the least significant byte of generated primes
+- Explored secure key establishment
+- Analyzed Diffie-Hellman security properties
+- Investigated Man-in-the-Middle attacks against unauthenticated key exchange
+
+These exercises strengthened my practical understanding of cryptographic key establishment within Security Engineering environments.
+
+---
+
+# Security Engineering Takeaways
+
+- Diffie-Hellman enables secure key exchange over untrusted networks.
+- Private keys are never transmitted during the exchange.
+- Large prime numbers provide computational security.
+- The Discrete Logarithm Problem forms the mathematical foundation of Diffie-Hellman security.
+- OpenSSL provides practical tools for generating production-quality Diffie-Hellman parameters.
+- Diffie-Hellman alone does not authenticate communicating parties.
+- Authentication mechanisms such as PKI are essential to prevent MITM attacks.
+- Secure communication protocols combine multiple cryptographic techniques rather than relying on a single algorithm.
+
+---
+
+# Challenges Encountered
+
+- Understanding modular exponentiation concepts.
+- Differentiating between public parameters and private values.
+- Inspecting and interpreting OpenSSL-generated Diffie-Hellman parameter files.
+- Understanding why secure key exchange does not automatically provide authentication.
+- Visualizing how Man-in-the-Middle attacks compromise unauthenticated protocols.
+
+---
+
+# Lessons Learned
+
+This project provided practical experience implementing the Diffie-Hellman key exchange protocol and reinforced the importance of secure key establishment in modern cryptographic systems. I gained hands-on experience generating and validating Diffie-Hellman parameters using OpenSSL while developing a deeper understanding of how shared secrets are securely established across untrusted networks. The project also highlighted that encryption alone is insufficient for secure communication and demonstrated why authentication mechanisms such as Public Key Infrastructure (PKI) are critical for defending against Man-in-the-Middle attacks in real-world environments.
+
+---
+
+
+# Disclaimer
+
+> **Disclaimer:** This project was completed within an authorized training and laboratory environment for educational purposes. All cryptographic analysis, parameter generation, protocol implementation, and security validation activities were performed using controlled lab resources and do not target or expose real-world systems, networks, or sensitive information.
